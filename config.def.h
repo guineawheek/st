@@ -5,8 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
-static int borderpx = 2;
+static char *font = "Liberation Mono:size=11:antialias=true:autohint=true";
+static int borderpx = 1;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -82,33 +82,46 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
+/* Terminal colors for alternate (dark) palette */
+static const char *altcolorname[] = {
+	/* solarized dark */
+	"#073642",  /*  0: black    */
+	"#dc322f",  /*  1: red      */
+	"#859900",  /*  2: green    */
+	"#b58900",  /*  3: yellow   */
+	"#268bd2",  /*  4: blue     */
+	"#d33682",  /*  5: magenta  */
+	"#2aa198",  /*  6: cyan     */
+	"#eee8d5",  /*  7: white    */
+	"#002b36",  /*  8: brblack  */
+	"#cb4b16",  /*  9: brred    */
+	"#586e75",  /* 10: brgreen  */
+	"#657b83",  /* 11: bryellow */
+	"#839496",  /* 12: brblue   */
+	"#6c71c4",  /* 13: brmagenta*/
+	"#93a1a1",  /* 14: brcyan   */
+	"#fdf6e3",  /* 15: brwhite  */
+};
+
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
-	/* 8 normal colors */
-	"black",
-	"red3",
-	"green3",
-	"yellow3",
-	"blue2",
-	"magenta3",
-	"cyan3",
-	"gray90",
-
-	/* 8 bright colors */
-	"gray50",
-	"red",
-	"green",
-	"yellow",
-	"#5c5cff",
-	"magenta",
-	"cyan",
-	"white",
-
-	[255] = 0,
-
-	/* more colors can be added after 255 to use with DefaultXX */
-	"#cccccc",
-	"#555555",
+	/* solarized light*/
+	"#073642",  /*  0: black    */
+	"#dc322f",  /*  1: red      */
+	"#859900",  /*  2: green    */
+	"#b58900",  /*  3: yellow   */
+	"#268bd2",  /*  4: blue     */
+	"#d33682",  /*  5: magenta  */
+	"#2aa198",  /*  6: cyan     */
+	"#eee8d5",  /*  7: white    (swap with black?)*/
+	"#002b36",  /*  8: brblack  */
+	"#cb4b16",  /*  9: brred    */
+	"#93a1a1",  /* 10: brgreen  */
+	"#839496",  /* 11: bryellow */
+	"#657b83",  /* 12: brblue   */
+	"#6c71c4",  /* 13: brmagenta*/
+	"#586e75",  /* 14: brcyan   */
+	"#fdf6e3",  /* 15: brwhite  */
 };
 
 
@@ -116,10 +129,10 @@ static const char *colorname[] = {
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
-unsigned int defaultfg = 7;
-unsigned int defaultbg = 0;
-static unsigned int defaultcs = 256;
-static unsigned int defaultrcs = 257;
+unsigned int defaultfg = 0;
+unsigned int defaultbg = 15;
+static unsigned int defaultcs = 0;
+static unsigned int defaultrcs = 15;
 
 /*
  * Default shape of cursor
@@ -148,7 +161,7 @@ static unsigned int mousebg = 0;
  * Color used to display font attributes when fontconfig selected a font which
  * doesn't match the ones requested.
  */
-static unsigned int defaultattr = 11;
+static unsigned int defaultattr = 15;
 
 /*
  * Internal mouse shortcuts.
@@ -180,6 +193,7 @@ static Shortcut shortcuts[] = {
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
 	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ XK_ANY_MOD,           XK_Break,       swapcolors,     {.i =  0} },
 };
 
 /*
